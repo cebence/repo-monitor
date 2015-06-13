@@ -28,7 +28,7 @@ Initial implementation consists of these components:
 
 
 ## Technical Stories
-- [ ] Implement this project hierarchy:
+- [x] Implement this project hierarchy:
 ```
 %PROJECT%
   + %PROJECT%.sln
