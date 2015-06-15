@@ -1,5 +1,7 @@
 # Repository Monitor a.k.a. RepoMonitor
 
+[![Build status](https://ci.appveyor.com/api/projects/status/9davjk5pwvcluoxm?svg=true)](https://ci.appveyor.com/project/cebence/repo-monitor)
+
 Repository Monitor is a GUI application for monitoring the status of one or more local Mercurial repositories against its default remote repository, and notify the user of any changes.
 
 In case of incoming changes the user can update the local repository by *pull*-ing from the remote repository, and in case of outgoing changes the user will be reminded to *push* the changes he/she made to the remote repository.
@@ -57,5 +59,5 @@ Initial implementation consists of these components:
 - [ ] **Unit tests:** test the parsing logic using example `hg` output.
 - [ ] **Integration tests:** use installed `hg.exe` against `test-resources`.
 - [ ] **Integration tests:** embed Mercurial installation in a project sub-folder like `%UserProfile%\AppData\Local\Atlassian\SourceTree\hg_local`?
-- [ ] Configure Continuous Integration (CI), perhaps http://dotnet-ci.cloudapp.net/.
+- [x] Configure Continuous Integration (CI).
 - [ ] To open a repository in *Hg Workbench* issue the following command `thgw.exe -R "<full\path\to\repo>"` (or `thg.exe workbench -R "<full\path\to\repo>"`). `--newworkbench` parameter is unknown to `thg.exe`, [maybe it works](https://bitbucket.org/tortoisehg/thg/issue/4094/thgwexe-r-e-src-dev-newworkbench-does-not) in a newer version of Mercurial.
