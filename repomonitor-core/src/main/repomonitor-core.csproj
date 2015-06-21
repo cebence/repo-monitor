@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Repository.cs"/>
     <Compile Include="RepoMonitor.cs"/>
+    <Compile Include="SCM.cs"/>
     <Compile Include="Properties\AssemblyInfo.cs"/>
   </ItemGroup>
   <ItemGroup>
