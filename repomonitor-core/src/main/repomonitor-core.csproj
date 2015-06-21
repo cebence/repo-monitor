@@ -59,6 +59,8 @@
     <Compile Include="Repository.cs"/>
     <Compile Include="RepoMonitor.cs"/>
     <Compile Include="SCM.cs"/>
+    <Compile Include="Mercurial.cs"/>
+    <Compile Include="ProcessExecutor.cs"/>
     <Compile Include="Properties\AssemblyInfo.cs"/>
   </ItemGroup>
   <ItemGroup>

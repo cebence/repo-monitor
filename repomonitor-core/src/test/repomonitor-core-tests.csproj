@@ -92,10 +92,14 @@
   <ItemGroup>
     <Compile Include="RepositoryTest.cs"/>
     <Compile Include="RepoMonitorTest.cs"/>
+    <Compile Include="MercurialTest.cs"/>
     <Compile Include="Properties\AssemblyInfo.cs"/>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config"/>
+  </ItemGroup>
+  <ItemGroup>
+    <TestResources Include="test-resources\**\*.*"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\main\repomonitor-core.csproj">
@@ -127,7 +131,10 @@
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
-  <Target Name="AfterBuild">
-  </Target>
   -->
+  <!-- Copy test-resources to the same folder as the DLL. -->
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="@(TestResources)"
+        DestinationFiles="@(TestResources->'$(OutputPath)test-resources\%(RecursiveDir)%(Filename)%(Extension)')"/>
+  </Target>
 </Project>
