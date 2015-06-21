@@ -18,7 +18,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <BaseIntermediateOutputPath>..\..\build\obj\</BaseIntermediateOutputPath>
     <FileAlignment>512</FileAlignment>
-	<IntermediateOutputPath>$(BaseIntermediateOutputPath)$(Configuration)\$(Platform)\</IntermediateOutputPath>
+    <IntermediateOutputPath>$(BaseIntermediateOutputPath)$(Configuration)\$(Platform)\</IntermediateOutputPath>
     <PlatformTarget>x86</PlatformTarget>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
