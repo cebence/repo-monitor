@@ -8,8 +8,9 @@ namespace RepoMonitor.Core {
   /// SCM implementation for the Mercurial.
   /// </summary>
   public class Mercurial : SCM {
-    #region Mercurial command-lines
-    public const String CMD_VERSION = "hg --version";
+    #region Mercurial executable and command-line arguments
+    public const String HG_EXE = "hg.exe";
+    public const String CMD_VERSION = "--version";
     #endregion
 
     private ProcessExecutor procExecutor;
@@ -44,9 +45,9 @@ namespace RepoMonitor.Core {
     /// </summary>
     public String GetVersionText() {
       // Approx. execution time: 125 ms.
-      ProcessExecutor.Result result = procExecutor.Execute(CMD_VERSION,
-          ProcessExecutor.UserHome, TimeSpan.FromSeconds(5), String.Empty);
-      if (result.Success) {
+      ProcessExecutor.Result result = procExecutor.Execute(HG_EXE, CMD_VERSION,
+          ProcessExecutor.UserHome, null, TimeSpan.FromSeconds(5));
+      if (result.ExitCode == 0) {
         String version = result.StdOut.Split("\n".ToCharArray())[0];
         return version;
       }

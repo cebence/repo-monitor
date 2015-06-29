@@ -93,6 +93,7 @@
     <Compile Include="RepositoryTest.cs"/>
     <Compile Include="RepoMonitorTest.cs"/>
     <Compile Include="MercurialTest.cs"/>
+    <Compile Include="ProcessExecutorTest.cs"/>
     <Compile Include="Properties\AssemblyInfo.cs"/>
   </ItemGroup>
   <ItemGroup>

@@ -2,6 +2,7 @@ using Moq;
 using NUnit.Framework;
 using RepoMonitor.Core;
 using System;
+using System.Collections.Specialized;
 using System.IO;
 
 namespace RepoMonitor.Core.UnitTests {
@@ -80,9 +81,9 @@ namespace RepoMonitor.Core.UnitTests {
       // Creates a ProcessExecutor mock that returns predefined execution output.
       var mock = new Mock<ProcessExecutor>();
 
-      ProcessExecutor.Result versionResult = new ProcessExecutor.Result(0, HG_VERSION, String.Empty);
+      ProcessExecutor.Result versionResult = new ProcessExecutor.Result(null, 0, HG_VERSION, String.Empty);
       mock.Setup(pe =>
-          pe.Execute(Mercurial.CMD_VERSION, It.IsAny<string>(), It.IsAny<TimeSpan>(), It.IsAny<string>()))
+          pe.Execute(Mercurial.HG_EXE, Mercurial.CMD_VERSION, It.IsAny<String>(), It.IsAny<StringDictionary>(), It.IsAny<TimeSpan>()))
           .Returns(versionResult);
 
       processExecutorMock = mock.Object;
