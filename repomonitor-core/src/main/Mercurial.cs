@@ -39,7 +39,7 @@ namespace RepoMonitor.Core {
         String version = GetVersionText();
         return version != null;
       }
-      catch (FileNotFoundException e) {
+      catch (FileNotFoundException) {
         return false;
       }
     }
