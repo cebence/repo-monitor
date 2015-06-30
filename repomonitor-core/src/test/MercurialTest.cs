@@ -70,38 +70,31 @@ namespace RepoMonitor.Core.UnitTests {
         "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.";
     #endregion
 
-    private Mercurial hgInstance;
-    private ProcessExecutor processExecutorMock;
+    #region Instantiation test cases
 
     /// <summary>
-    /// Configures the <see cref="ProcessExecutor"/> mock.
+    /// Confirm the specified ProcessExecutor instance is used.
     /// </summary>
-    [TestFixtureSetUp]
-    public void ConfigureProcessExecutorMock() {
-      // Creates a ProcessExecutor mock that returns predefined execution output.
-      var mock = new Mock<ProcessExecutor>();
+    [Test]
+    public void MercurialInstanceUsesSpecifiedExecutor() {
+      var peMock = new Mock<ProcessExecutor>();
+      ConfigureMock_CMD_VERSION(peMock);
 
-      ProcessExecutor.Result versionResult = new ProcessExecutor.Result(null, 0, HG_VERSION, String.Empty);
-      mock.Setup(pe =>
-          pe.Execute(Mercurial.HG_EXE, Mercurial.CMD_VERSION, It.IsAny<String>(), It.IsAny<StringDictionary>(), It.IsAny<TimeSpan>()))
-          .Returns(versionResult);
+      Mercurial hg = new Mercurial(peMock.Object);
+      hg.GetVersionText();
 
-      processExecutorMock = mock.Object;
+      peMock.Verify(pe => pe.Execute(
+          Mercurial.HG_EXE,
+          Mercurial.CMD_VERSION,
+          It.IsAny<String>(),
+          It.IsAny<StringDictionary>(),
+          It.IsAny<TimeSpan>()
+      ));
     }
 
-    /// <summary>
-    /// Sets up a Mercurial instance with ProcessExecutor mock that will return
-    /// predefined execution results for testing output parsing logic.
-    /// </summary>
-    [SetUp]
-    public void SetUp() {
-      hgInstance = new Mercurial(processExecutorMock);
-    }
+    #endregion
 
-    [TearDown]
-    public void TearDown() {
-      hgInstance = null;
-    }
+    #region IsRepository(String) test cases
 
     /// <summary>
     /// Confirm a folder with the `.hg` sub-folder is recognized as a repository.
@@ -111,7 +104,8 @@ namespace RepoMonitor.Core.UnitTests {
       String testRepo = Path.Combine(FindResourcesPath(), "test-repo");
       Boolean expected = true;
 
-      Boolean actual = hgInstance.IsRepository(testRepo);
+      Mercurial hg = new Mercurial(new Mock<ProcessExecutor>().Object);
+      Boolean actual = hg.IsRepository(testRepo);
 
       Assert.AreEqual(expected, actual);
     }
@@ -124,7 +118,8 @@ namespace RepoMonitor.Core.UnitTests {
       String testRepo = Path.Combine(FindResourcesPath(), "fake-repo");
       Boolean expected = false;
 
-      Boolean actual = hgInstance.IsRepository(testRepo);
+      Mercurial hg = new Mercurial(new Mock<ProcessExecutor>().Object);
+      Boolean actual = hg.IsRepository(testRepo);
 
       Assert.AreEqual(expected, actual);
     }
@@ -137,10 +132,15 @@ namespace RepoMonitor.Core.UnitTests {
       String testRepo = Path.Combine(FindResourcesPath(), "123");
       Boolean expected = false;
 
-      Boolean actual = hgInstance.IsRepository(testRepo);
+      Mercurial hg = new Mercurial(new Mock<ProcessExecutor>().Object);
+      Boolean actual = hg.IsRepository(testRepo);
 
       Assert.AreEqual(expected, actual);
     }
+
+    #endregion
+
+    #region GetVersionText() test cases
 
     /// <summary>
     /// Confirm the version info is only the first line of Mercurial output
@@ -149,9 +149,92 @@ namespace RepoMonitor.Core.UnitTests {
     [Test]
     public void GetVersionTextReturnsOnlyTheFirstLine() {
       String expected = "Mercurial Distributed SCM (version 2.0.2)";
-      String actual = hgInstance.GetVersionText();
+
+      var peMock = new Mock<ProcessExecutor>();
+      ConfigureMock_CMD_VERSION(peMock);
+
+      Mercurial hg = new Mercurial(peMock.Object);
+      String actual = hg.GetVersionText();
 
       Assert.AreEqual(expected, actual);
     }
+
+    #endregion
+
+    #region IsAvailable() test cases
+
+    /// <summary>
+    /// Confirm the successful execution of the `hg --version` command
+    /// is recognized as "Mercurial is installed".
+    /// </summary>
+    [Test]
+    public void IsAvailableReturnsTrue() {
+      Boolean expected = true;
+
+      var peMock = new Mock<ProcessExecutor>();
+      ConfigureMock_CMD_VERSION(peMock);
+
+      Mercurial hg = new Mercurial(peMock.Object);
+      Boolean actual = hg.IsAvailable();
+
+      Assert.AreEqual(expected, actual);
+    }
+
+    /// <summary>
+    /// Confirm the FileNotFoundException to the `hg --version` command
+    /// is recognized as "Mercurial installation not found".
+    /// </summary>
+    [Test]
+    public void IsAvailableReturnsFalse() {
+      Boolean expected = false;
+
+      var peMock = new Mock<ProcessExecutor>();
+      ConfigureMock_FILE_NOT_FOUND(peMock);
+
+      Mercurial hg = new Mercurial(peMock.Object);
+      Boolean actual = hg.IsAvailable();
+
+      Assert.AreEqual(expected, actual);
+    }
+
+    #endregion
+
+    #region Mocking methods
+
+    /// <summary>
+    /// Configures the specified mock to respond to the "hg --version" command
+    /// and returns the mock.
+    /// </summary>
+    Mock<ProcessExecutor> ConfigureMock_CMD_VERSION(Mock<ProcessExecutor> mock) {
+      ProcessExecutor.Result versionResult = new ProcessExecutor.Result(null,
+          0, HG_VERSION, String.Empty);
+      mock.Setup(pe => pe.Execute(
+          Mercurial.HG_EXE,
+          Mercurial.CMD_VERSION,
+          It.IsAny<String>(),
+          It.IsAny<StringDictionary>(),
+          It.IsAny<TimeSpan>())
+      ).Returns(versionResult);
+
+      return mock;
+    }
+
+    /// <summary>
+    /// Configures the specified mock to always respond with the
+    /// FileNotFoundException exception.
+    /// </summary>
+    Mock<ProcessExecutor> ConfigureMock_FILE_NOT_FOUND(Mock<ProcessExecutor> mock) {
+      mock.Setup(pe => pe.Execute(
+          It.IsAny<String>(),
+          It.IsAny<String>(),
+          It.IsAny<String>(),
+          It.IsAny<StringDictionary>(),
+          It.IsAny<TimeSpan>())
+      ).Throws<FileNotFoundException>();
+
+      return mock;
+    }
+
+    #endregion
   }
 }

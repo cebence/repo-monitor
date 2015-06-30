@@ -35,8 +35,13 @@ namespace RepoMonitor.Core {
     /// system, <see langword="false"/> otherwise.
     /// </returns>
     public Boolean IsAvailable() {
-      String version = GetVersionText();
-      return version != null;
+      try {
+        String version = GetVersionText();
+        return version != null;
+      }
+      catch (FileNotFoundException e) {
+        return false;
+      }
     }
 
     /// <summary>
