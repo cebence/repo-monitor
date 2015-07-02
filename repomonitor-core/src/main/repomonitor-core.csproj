@@ -61,6 +61,7 @@
     <Compile Include="SCM.cs"/>
     <Compile Include="Mercurial.cs"/>
     <Compile Include="ProcessExecutor.cs"/>
+    <Compile Include="RepositoryFinder.cs"/>
     <Compile Include="Properties\AssemblyInfo.cs"/>
   </ItemGroup>
   <ItemGroup>

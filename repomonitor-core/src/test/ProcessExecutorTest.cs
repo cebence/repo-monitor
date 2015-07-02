@@ -11,74 +11,12 @@ namespace RepoMonitor.Core.UnitTests {
   /// </summary>
   [TestFixture]
   public class ProcessExecutorTest {
-    #region Utility methods
-
-    /// <summary>
-    /// Returns the full path to solution's "packages" folder (where NuGet
-    /// dependencies are kept) by searching upward from the given directory or
-    /// <see langword="null"/> if it couldn't be found.
-    /// </summary>
-    /// <param name="startingPath">
-    /// Directory to start from (included in the search).
-    /// If <see langword="null"/> current directory is used.
-    /// </param>
-    /// <returns>
-    /// Full path to the "packages" folder, if found, or <see langword="null"/>
-    /// </returns>
-    public static String FindPackagesFolder(String startingPath = null) {
-      if (startingPath == null) {
-          startingPath = Directory.GetCurrentDirectory();
-      }
-      if (Directory.Exists(startingPath)) {
-        DirectoryInfo current = new DirectoryInfo(startingPath);
-        while (current != null) {
-          String path = Path.Combine(current.FullName, "packages");
-          if (Directory.Exists(path)) {
-            return path;
-          }
-          current = current.Parent;
-        }
-      }
-      return null;
-    }
-
-    /// <summary>
-    /// Returns the full path to the "echoer.exe" file (inside solution's
-    /// NuGet packages) by searching upward from the given directory or
-    /// <see langword="null"/> if it couldn't be found.
-    /// </summary>
-    /// <param name="startingPath">
-    /// Directory to start from (included in the search).
-    /// If <see langword="null"/> current directory is used.
-    /// </param>
-    /// <returns>
-    /// Full path to the "echoer.exe", if found, or <see langword="null"/>
-    /// </returns>
-    public static String FindEchoerTool(String startingPath = null) {
-      String packages = FindPackagesFolder(startingPath);
-      if (packages != null) {
-        String[] dirs = Directory.GetDirectories(packages, "echoer.*");
-        if (dirs.Length > 0) {
-          String echoer = Path.Combine(dirs[0], "lib", "net45", "echoer.exe");
-          if (File.Exists(echoer)) {
-            return echoer;
-          }
-        }
-      }
-      return null;
-    }
-
-    #endregion
-
-    private String echoerPath;
-
     /// <summary>
     /// Configures the <see cref="ProcessExecutor"/> mock.
     /// </summary>
     [TestFixtureSetUp]
     public void ConfigureProcessExecutorMock() {
-      echoerPath = FindEchoerTool();
-      if (echoerPath == null) {
+      if (TestUtil.EchoerPath == null) {
         throw new Exception("Could not find Echoer tool.");
       }
     }
@@ -118,7 +56,7 @@ namespace RepoMonitor.Core.UnitTests {
       const int expected = 21;
 
       ProcessExecutor pe = new ProcessExecutor();
-      ProcessExecutor.Result result = pe.Execute(echoerPath,
+      ProcessExecutor.Result result = pe.Execute(TestUtil.EchoerPath,
           String.Format("-exit {0}", expected),
           null, null, TimeSpan.FromSeconds(1));
 
@@ -135,7 +73,7 @@ namespace RepoMonitor.Core.UnitTests {
       const String expected = "1, 2, 3, testing";
 
       ProcessExecutor pe = new ProcessExecutor();
-      ProcessExecutor.Result result = pe.Execute(echoerPath,
+      ProcessExecutor.Result result = pe.Execute(TestUtil.EchoerPath,
           String.Format("-out \"{0}\"", expected),
           null, null, TimeSpan.FromSeconds(1));
 
@@ -152,7 +90,7 @@ namespace RepoMonitor.Core.UnitTests {
       const String expected = "F1! F1!";
 
       ProcessExecutor pe = new ProcessExecutor();
-      ProcessExecutor.Result result = pe.Execute(echoerPath,
+      ProcessExecutor.Result result = pe.Execute(TestUtil.EchoerPath,
           String.Format("-err \"{0}\"", expected),
           null, null, TimeSpan.FromSeconds(1));
 
@@ -173,7 +111,7 @@ namespace RepoMonitor.Core.UnitTests {
       expectedVars.Add(expectedName, expectedValue);
 
       ProcessExecutor pe = new ProcessExecutor();
-      ProcessExecutor.Result result = pe.Execute(echoerPath,
+      ProcessExecutor.Result result = pe.Execute(TestUtil.EchoerPath,
           String.Format("-env {0}", expectedName),
           null, expectedVars, TimeSpan.FromSeconds(1));
 
@@ -185,19 +123,19 @@ namespace RepoMonitor.Core.UnitTests {
     /// <summary>
     /// Confirm exception is thrown when process exceeds timeout limit.
     /// </summary>
-    [Test, ExpectedException("System.TimeoutException")]
+    [Test, ExpectedException(typeof(TimeoutException))]
     public void TooLongProcessingThrowsException() {
-      new ProcessExecutor().Execute(echoerPath, "-wait 2",
+      new ProcessExecutor().Execute(TestUtil.EchoerPath, "-wait 2",
           null, null, TimeSpan.FromSeconds(1));
     }
 
     /// <summary>
     /// Confirm exception is thrown in case of invalid absolute path.
     /// </summary>
-    [Test, ExpectedException("System.IO.FileNotFoundException")]
+    [Test, ExpectedException(typeof(FileNotFoundException))]
     public void InvalidAbsolutePathThrowsException() {
       // Create an invalid path by appending "-not" to a valid one.
-      String invalidPath = echoerPath + "-not";
+      String invalidPath = TestUtil.EchoerPath + "-not";
 
       new ProcessExecutor().Execute(invalidPath, "-out Ouch!",
           null, null, TimeSpan.FromSeconds(1));
@@ -206,7 +144,7 @@ namespace RepoMonitor.Core.UnitTests {
     /// <summary>
     /// Confirm exception is thrown in case of invalid relative path.
     /// </summary>
-    [Test, ExpectedException("System.IO.FileNotFoundException")]
+    [Test, ExpectedException(typeof(FileNotFoundException))]
     public void InvalidRelativePathThrowsException() {
       // This executable should not exist in the current folder or the PATH.
       String invalidPath = String.Format("{0}.exe", Path.GetRandomFileName());
@@ -218,9 +156,9 @@ namespace RepoMonitor.Core.UnitTests {
     /// <summary>
     /// Confirm the static "Exec()" calls the instance method.
     /// </summary>
-    [Test, ExpectedException("System.IO.FileNotFoundException")]
+    [Test, ExpectedException(typeof(FileNotFoundException))]
     public void StaticExecAlsoWorks() {
-      ProcessExecutor.Exec(echoerPath + "-not", "-out Ouch!",
+      ProcessExecutor.Exec(TestUtil.EchoerPath + "-not", "-out Ouch!",
           null, null, TimeSpan.FromSeconds(1));
     }
   }

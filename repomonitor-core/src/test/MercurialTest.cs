@@ -19,47 +19,6 @@ namespace RepoMonitor.Core.UnitTests {
     private const String PROP_URL = "Url";
     #endregion
 
-    #region Utility methods
-
-    /// <summary>
-    /// Returns the full path to the `test-resources` folder (inside the
-    /// test project) by searching upward from the given directory or
-    /// <see langword="null"/> if it couldn't be found.
-    /// </summary>
-    /// <param name="startingPath">
-    /// directory to start from (included in the search)
-    /// </param>
-    /// <returns>
-    /// Path to the `test-resources` folder, if found, or <see langword="null"/>
-    /// </returns>
-    public static String FindResourcesPath(String startingPath) {
-      if (Directory.Exists(startingPath)) {
-        DirectoryInfo current = new DirectoryInfo(startingPath);
-        while (current != null) {
-          String testResources = Path.Combine(current.FullName, "test-resources");
-          if (Directory.Exists(testResources)) {
-            return testResources;
-          }
-          current = current.Parent;
-        }
-      }
-      return null;
-    }
-
-    /// <summary>
-    /// Returns the full path to the `test-resources` folder (inside the
-    /// test project) by searching upward from the current working directory
-    /// or <see langword="null"/> if it couldn't be found.
-    /// </summary>
-    /// <returns>
-    /// Path to the `test-resources` folder, if found, or <see langword="null"/>
-    /// </returns>
-    public static String FindResourcesPath() {
-      return FindResourcesPath(Directory.GetCurrentDirectory());
-    }
-
-    #endregion
-
     #region Test data
     private const String HG_VERSION =
         "Mercurial Distributed SCM (version 2.0.2)\n" +
@@ -101,7 +60,7 @@ namespace RepoMonitor.Core.UnitTests {
     /// </summary>
     [Test]
     public void RecognizeValidHgRepository() {
-      String testRepo = Path.Combine(FindResourcesPath(), "test-repo");
+      String testRepo = Path.Combine(TestUtil.TestResourcesPath, "test-repo");
       Boolean expected = true;
 
       Mercurial hg = new Mercurial(new Mock<ProcessExecutor>().Object);
@@ -115,7 +74,7 @@ namespace RepoMonitor.Core.UnitTests {
     /// </summary>
     [Test]
     public void RecognizeInvalidHgRepository() {
-      String testRepo = Path.Combine(FindResourcesPath(), "fake-repo");
+      String testRepo = Path.Combine(TestUtil.TestResourcesPath, "fake-repo");
       Boolean expected = false;
 
       Mercurial hg = new Mercurial(new Mock<ProcessExecutor>().Object);
@@ -129,7 +88,7 @@ namespace RepoMonitor.Core.UnitTests {
     /// </summary>
     [Test]
     public void NonexistingFolderIsNotHgRepository() {
-      String testRepo = Path.Combine(FindResourcesPath(), "123");
+      String testRepo = Path.Combine(TestUtil.TestResourcesPath, "123");
       Boolean expected = false;
 
       Mercurial hg = new Mercurial(new Mock<ProcessExecutor>().Object);
