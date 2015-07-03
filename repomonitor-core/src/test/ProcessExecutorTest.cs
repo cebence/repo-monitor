@@ -12,6 +12,11 @@ namespace RepoMonitor.Core.UnitTests {
   [TestFixture]
   public class ProcessExecutorTest {
     /// <summary>
+    /// Default timeout for tests is 3 seconds.
+    /// </summary>
+    const int DEFAULT_TIMEOUT = 3;
+
+    /// <summary>
     /// Configures the <see cref="ProcessExecutor"/> mock.
     /// </summary>
     [TestFixtureSetUp]
@@ -58,7 +63,7 @@ namespace RepoMonitor.Core.UnitTests {
       ProcessExecutor pe = new ProcessExecutor();
       ProcessExecutor.Result result = pe.Execute(TestUtil.EchoerPath,
           String.Format("-exit {0}", expected),
-          null, null, TimeSpan.FromSeconds(1));
+          null, null, TimeSpan.FromSeconds(DEFAULT_TIMEOUT));
 
       int actual = result.ExitCode;
 
@@ -75,7 +80,7 @@ namespace RepoMonitor.Core.UnitTests {
       ProcessExecutor pe = new ProcessExecutor();
       ProcessExecutor.Result result = pe.Execute(TestUtil.EchoerPath,
           String.Format("-out \"{0}\"", expected),
-          null, null, TimeSpan.FromSeconds(1));
+          null, null, TimeSpan.FromSeconds(DEFAULT_TIMEOUT));
 
       String actual = result.StdOut;
 
@@ -92,7 +97,7 @@ namespace RepoMonitor.Core.UnitTests {
       ProcessExecutor pe = new ProcessExecutor();
       ProcessExecutor.Result result = pe.Execute(TestUtil.EchoerPath,
           String.Format("-err \"{0}\"", expected),
-          null, null, TimeSpan.FromSeconds(1));
+          null, null, TimeSpan.FromSeconds(DEFAULT_TIMEOUT));
 
       String actual = result.StdErr;
 
@@ -113,7 +118,7 @@ namespace RepoMonitor.Core.UnitTests {
       ProcessExecutor pe = new ProcessExecutor();
       ProcessExecutor.Result result = pe.Execute(TestUtil.EchoerPath,
           String.Format("-env {0}", expectedName),
-          null, expectedVars, TimeSpan.FromSeconds(1));
+          null, expectedVars, TimeSpan.FromSeconds(DEFAULT_TIMEOUT));
 
       String actual = result.StdOut;
 
@@ -138,7 +143,7 @@ namespace RepoMonitor.Core.UnitTests {
       String invalidPath = TestUtil.EchoerPath + "-not";
 
       new ProcessExecutor().Execute(invalidPath, "-out Ouch!",
-          null, null, TimeSpan.FromSeconds(1));
+          null, null, TimeSpan.FromSeconds(DEFAULT_TIMEOUT));
     }
 
     /// <summary>
@@ -150,7 +155,7 @@ namespace RepoMonitor.Core.UnitTests {
       String invalidPath = String.Format("{0}.exe", Path.GetRandomFileName());
 
       new ProcessExecutor().Execute(invalidPath, "-out Ouch!",
-          null, null, TimeSpan.FromSeconds(1));
+          null, null, TimeSpan.FromSeconds(DEFAULT_TIMEOUT));
     }
 
     /// <summary>
@@ -159,7 +164,7 @@ namespace RepoMonitor.Core.UnitTests {
     [Test, ExpectedException(typeof(FileNotFoundException))]
     public void StaticExecAlsoWorks() {
       ProcessExecutor.Exec(TestUtil.EchoerPath + "-not", "-out Ouch!",
-          null, null, TimeSpan.FromSeconds(1));
+          null, null, TimeSpan.FromSeconds(DEFAULT_TIMEOUT));
     }
   }
 }
