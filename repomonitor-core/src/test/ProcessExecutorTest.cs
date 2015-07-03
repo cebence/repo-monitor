@@ -71,6 +71,22 @@ namespace RepoMonitor.Core.UnitTests {
     }
 
     /// <summary>
+    /// Confirm the "no-timeout" version works the same.
+    /// </summary>
+    [Test]
+    public void ExecuteNoTimeoutCollectsExitCode() {
+      const int expected = 21;
+
+      ProcessExecutor pe = new ProcessExecutor();
+      ProcessExecutor.Result result = pe.Execute(TestUtil.EchoerPath,
+          String.Format("-exit {0}", expected), null, null);
+
+      int actual = result.ExitCode;
+
+      Assert.AreEqual(expected, actual);
+    }
+
+    /// <summary>
     /// Confirm the executable's stdout output was collected.
     /// </summary>
     [Test]
