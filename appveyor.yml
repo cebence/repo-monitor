@@ -3,3 +3,6 @@ configuration: Release
 # Restore NuGet packages before running MSBuild.
 before_build:
   - nuget restore repomonitor-core\repomonitor-core.sln
+
+build:
+  project: repomonitor-core\repomonitor-core.sln
