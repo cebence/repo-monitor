@@ -158,6 +158,21 @@ namespace RepoMonitor.Core.UnitTests {
 
     #endregion
 
+    #region method() test cases
+    #endregion
+    
+    #region method() test cases
+    #endregion
+
+    #region method() test cases
+    #endregion
+
+    #region method() test cases
+    #endregion
+
+    #region method() test cases
+    #endregion
+
     #region Mocking methods
 
     /// <summary>
