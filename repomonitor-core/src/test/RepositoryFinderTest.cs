@@ -111,5 +111,21 @@ namespace RepoMonitor.Core.UnitTests {
 
       // TODO Add checks for Git: GIT_REPO_1 & GIT_REPO_2
     }
+
+    /// <summary>
+    /// Confirm the <see cref="RepositoryFinder"/> has found the repository.
+    /// </summary>
+    [Test]
+    public void FindRepositoriesOnRepoDirReturnsOneItem() {
+      String repoPath = Path.Combine(TestUtil.TestResourcesPath, HG_REPO_1);
+      RepositoryFinder finder = new RepositoryFinder(CreateArrayOfMockedSCMs());
+
+      IDictionary<String, SCM> repos = finder.FindRepositories(repoPath);
+
+      Assert.AreEqual(1, repos.Count);
+      hgMock.Verify(m => m.IsRepository(It.IsAny<String>()));
+
+      // TODO Add checks for Git: GIT_REPO_1
+    }
   }
 }
