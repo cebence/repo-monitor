@@ -14,18 +14,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{9AA2A4
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|x86 = Debug|x86
-		Release|x86 = Release|x86
+		Debug|AnyCPU = Debug|AnyCPU
+		Release|AnyCPU = Release|AnyCPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{3C50D8E2-971B-46CE-96FA-B2B938F79590}.Debug|x86.ActiveCfg = Debug|x86
-		{3C50D8E2-971B-46CE-96FA-B2B938F79590}.Debug|x86.Build.0 = Debug|x86
-		{3C50D8E2-971B-46CE-96FA-B2B938F79590}.Release|x86.ActiveCfg = Release|x86
-		{3C50D8E2-971B-46CE-96FA-B2B938F79590}.Release|x86.Build.0 = Release|x86
-		{F96B09B0-D803-4BB5-8B73-44A74D67B986}.Debug|x86.ActiveCfg = Debug|x86
-		{F96B09B0-D803-4BB5-8B73-44A74D67B986}.Debug|x86.Build.0 = Debug|x86
-		{F96B09B0-D803-4BB5-8B73-44A74D67B986}.Release|x86.ActiveCfg = Release|x86
-		{F96B09B0-D803-4BB5-8B73-44A74D67B986}.Release|x86.Build.0 = Release|x86
+		{3C50D8E2-971B-46CE-96FA-B2B938F79590}.Debug|AnyCPU.ActiveCfg = Debug|AnyCPU
+		{3C50D8E2-971B-46CE-96FA-B2B938F79590}.Debug|AnyCPU.Build.0 = Debug|AnyCPU
+		{3C50D8E2-971B-46CE-96FA-B2B938F79590}.Release|AnyCPU.ActiveCfg = Release|AnyCPU
+		{3C50D8E2-971B-46CE-96FA-B2B938F79590}.Release|AnyCPU.Build.0 = Release|AnyCPU
+		{F96B09B0-D803-4BB5-8B73-44A74D67B986}.Debug|AnyCPU.ActiveCfg = Debug|AnyCPU
+		{F96B09B0-D803-4BB5-8B73-44A74D67B986}.Debug|AnyCPU.Build.0 = Debug|AnyCPU
+		{F96B09B0-D803-4BB5-8B73-44A74D67B986}.Release|AnyCPU.ActiveCfg = Release|AnyCPU
+		{F96B09B0-D803-4BB5-8B73-44A74D67B986}.Release|AnyCPU.Build.0 = Release|AnyCPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
