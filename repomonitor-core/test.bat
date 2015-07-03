@@ -1,23 +1,30 @@
 @echo off
 
-call build.bat
+rem ############################################################
+rem Build the main project.
+call build.bat %1 %2
+if not %ERRORLEVEL%==0 exit /B %ERRORLEVEL%
 
-set _CONFIG_=/p:Configuration=Debug
-set _RUN_NUNIT_=%~dp0packages\NUnit.Runners.2.6.4\tools\nunit-console-x86.exe
+rem Reuse the build parameters (configuration, platform, etc.).
 
-rem Use .NET Framework SDK 4.5 by default.
-set TARGET_SDK=
+rem ############################################################
+rem Use the correct NUnit runner.
+set NUNIT_SUFFIX=
+if "%BUILD_PLATFORM:"=%"=="x86" set NUNIT_SUFFIX=-x86
+set "NUNIT_RUNNER=%~dp0packages\NUnit.Runners.2.6.4\tools\nunit-console%NUNIT_SUFFIX%.exe"
 
-rem But if there's 4.5.1 use that one instead.
-if exist "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1" set TARGET_SDK=/p:TargetFrameworkVersion=v4.5.1
+set OUTPUT_DIR=build\bin\%BUILD_CONFIG%
+if "%BUILD_PLATFORM:"=%"=="x86" set OUTPUT_DIR=%OUTPUT_DIR%\%BUILD_PLATFORM%
+if "%BUILD_PLATFORM:"=%"=="x64" set OUTPUT_DIR=%OUTPUT_DIR%\%BUILD_PLATFORM%
 
+rem ############################################################
 rem Build the unit tests.
-msbuild src\test\repomonitor-core-tests.csproj %_CONFIG_% %_PLATFORM_% %TARGET_SDK%
+msbuild src\test\repomonitor-core-tests.csproj %BUILD_PARAMS%
+set COMPILE_EXIT=%ERRORLEVEL%
+if not %COMPILE_EXIT%==0 exit /B %COMPILE_EXIT%
 
-if not %ERRORLEVEL%==0 goto SkipTests
-
-
+rem ############################################################
 rem Run the unit tests.
-%_RUN_NUNIT_% build\bin\Debug\x86\repomonitor-core-tests.dll -noresult
-
-:SkipTests
+"%NUNIT_RUNNER%" %OUTPUT_DIR%\repomonitor-core-tests.dll /nologo /noshadow /xml:%OUTPUT_DIR%\test-results.xml
+set UNITTEST_EXIT=%ERRORLEVEL%
+exit /B %UNITTEST_EXIT%

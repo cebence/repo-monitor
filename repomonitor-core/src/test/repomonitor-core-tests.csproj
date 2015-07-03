@@ -12,7 +12,7 @@
   <PropertyGroup>
     <!-- Set default configuration and platform. -->
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
   </PropertyGroup>
   <PropertyGroup>
     <!-- Project properties per convention. -->
@@ -20,7 +20,6 @@
     <BaseIntermediateOutputPath>..\..\build\obj\</BaseIntermediateOutputPath>
     <FileAlignment>512</FileAlignment>
     <IsCodedUITest>False</IsCodedUITest>
-    <PlatformTarget>x86</PlatformTarget>
     <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>

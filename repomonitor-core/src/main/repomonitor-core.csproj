@@ -11,7 +11,7 @@
   <PropertyGroup>
     <!-- Set default configuration and platform. -->
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
   </PropertyGroup>
   <PropertyGroup>
     <!-- Project properties per convention. -->
@@ -19,7 +19,6 @@
     <BaseIntermediateOutputPath>..\..\build\obj\</BaseIntermediateOutputPath>
     <FileAlignment>512</FileAlignment>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)$(Configuration)\$(Platform)\</IntermediateOutputPath>
-    <PlatformTarget>x86</PlatformTarget>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup>

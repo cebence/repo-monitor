@@ -54,7 +54,7 @@ Initial implementation consists of these components:
 - [ ] Configure MSBuild to run unit tests.
 - [ ] Redirect NUnit results (`TestResult.xml`) to `build` folder, i.e. `%PROJECT%\build\test-results.xml`.
 - [x] A repository is a folder containing the `.hg` sub-folder. http://mercurial.selenic.com/wiki/Repository
-- [ ] Application will detect existence of Mercurial by invoking `hg --version` and parsing the output.
+- [x] Application will detect existence of Mercurial by invoking `hg --version` and parsing the output.
 - [ ] Checking a repository for changes is done by invoking `hg summary --remote` in the repository folder and parsing the output.
 - [ ] **Unit tests:** test the parsing logic using example `hg` output.
 - [ ] **Integration tests:** use installed `hg.exe` against `test-resources`.
