@@ -40,19 +40,19 @@ Initial implementation consists of these components:
     + test
       + %PROJECT%-tests.csproj
   + build
-    - build.log
-    - test-results.log
     + bin
       + $(Configuration)
         + $(Platform)
+          - build-log.txt
+          - test-results.xml
     + obj
       + $(Configuration)
         + $(Platform)
 ```
-- [ ] Update `.gitignore` according to project hierarchy.
-- [ ] Redirect MSBuild log to `build` folder, i.e. `%PROJECT%\build\build.log`.
+- [x] Update `.gitignore` according to project hierarchy.
+- [x] Redirect MSBuild log to `build` folder, i.e. `%PROJECT%\build\$(Configuration)\$(Platform)\build-log.txt`.
 - [ ] Configure MSBuild to run unit tests.
-- [ ] Redirect NUnit results (`TestResult.xml`) to `build` folder, i.e. `%PROJECT%\build\test-results.xml`.
+- [x] Redirect NUnit results (`TestResult.xml`) to `build` folder, i.e. `%PROJECT%\build\$(Configuration)\$(Platform)\test-results.xml`.
 - [x] A repository is a folder containing the `.hg` sub-folder. http://mercurial.selenic.com/wiki/Repository
 - [x] Application will detect existence of Mercurial by invoking `hg --version` and parsing the output.
 - [ ] Checking a repository for changes is done by invoking `hg summary --remote` in the repository folder and parsing the output.

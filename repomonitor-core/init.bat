@@ -30,6 +30,13 @@ if defined BUILD_PLATFORM set "BUILD_PARAMS=%BUILD_PARAMS% /p:Platform=%BUILD_PL
 rem Use .NET Framework SDK 4.5 by default, but if 4.5.1 is available use it.
 if exist "%DOTNET_451_SDK%" set "BUILD_PARAMS=%BUILD_PARAMS% /p:TargetFrameworkVersion=v4.5.1"
 
+rem Limit the amount of information on the console.
+set "BUILD_PARAMS=%BUILD_PARAMS% /v:minimal"
+
+rem Direct MSBuild to save the build log to OUTPUT_DIR.
+set "BUILD_REPORT=%OUTPUT_DIR%\build-log.txt"
+set "BUILD_PARAMS=%BUILD_PARAMS% /fl /flp:logfile=%BUILD_REPORT%;verbosity:minimal"
+
 rem ############################################################
 rem Use the correct NUnit runner.
 set NUNIT_SUFFIX=
