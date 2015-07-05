@@ -12,9 +12,9 @@ namespace RepoMonitor.Core.UnitTests {
   [TestFixture]
   public class ProcessExecutorTest {
     /// <summary>
-    /// Default timeout for tests is 5 seconds.
+    /// Default timeout for tests is 10 seconds.
     /// </summary>
-    const int DEFAULT_TIMEOUT = 5;
+    const int DEFAULT_TIMEOUT = 10;
 
     /// <summary>
     /// Configures the <see cref="ProcessExecutor"/> mock.
