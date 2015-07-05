@@ -5,7 +5,7 @@ namespace RepoMonitor.Core {
   /// <summary>
   /// Repository monitor manages a list of repositories it monitors.
   /// </summary>
-  public class RepoMonitor {
+  public class RepositoryMonitor {
     /// <summary>
     /// Returns a collection of <see cref="SCM"/>s used.
     /// </summary>
@@ -25,9 +25,9 @@ namespace RepoMonitor.Core {
     #endregion
 
     /// <summary>
-    /// Initializes a new instance of <see cref="RepoMonitor"/>.
+    /// Initializes a new instance of <see cref="RepositoryMonitor"/>.
     /// </summary>
-    public RepoMonitor(ICollection<SCM> scms) {
+    public RepositoryMonitor(ICollection<SCM> scms) {
       SCMs = scms;
     }
 

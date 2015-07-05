@@ -46,17 +46,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp"/>
     <Reference Include="System"/>
     <Reference Include="System.Core"/>
-    <Reference Include="System.Xml.Linq"/>
-    <Reference Include="System.Data.DataSetExtensions"/>
-    <Reference Include="Microsoft.CSharp"/>
     <Reference Include="System.Data"/>
+    <Reference Include="System.Data.DataSetExtensions"/>
     <Reference Include="System.Xml"/>
+    <Reference Include="System.Xml.Linq"/>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Repository.cs"/>
-    <Compile Include="RepoMonitor.cs"/>
+    <Compile Include="RepositoryMonitor.cs"/>
     <Compile Include="SCM.cs"/>
     <Compile Include="Mercurial.cs"/>
     <Compile Include="ProcessExecutor.cs"/>
@@ -67,11 +67,4 @@
     <None Include="packages.config"/>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

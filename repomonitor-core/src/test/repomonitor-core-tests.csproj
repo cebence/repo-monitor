@@ -91,7 +91,7 @@
   <ItemGroup>
     <Compile Include="TestUtil.cs"/>
     <Compile Include="RepositoryTest.cs"/>
-    <Compile Include="RepoMonitorTest.cs"/>
+    <Compile Include="RepositoryMonitorTest.cs"/>
     <Compile Include="MercurialTest.cs"/>
     <Compile Include="ProcessExecutorTest.cs"/>
     <Compile Include="RepositoryFinderTest.cs"/>
@@ -129,11 +129,6 @@
   </Choose>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')"/>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  -->
   <!-- Copy test-resources to the same folder as the DLL. -->
   <Target Name="AfterBuild">
     <Copy SourceFiles="@(TestResources)"

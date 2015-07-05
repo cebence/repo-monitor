@@ -6,10 +6,10 @@ using System.Collections.Specialized;
 
 namespace RepoMonitor.Core.UnitTests {
   /// <summary>
-  /// Class under test: <see cref="RepoMonitor"/>
+  /// Class under test: <see cref="RepositoryMonitor"/>
   /// </summary>
   [TestFixture]
-  public class RepoMonitorTest {
+  public class RepositoryMonitorTest {
     #region Test data
     private const String REPO_URL = "local/filesystem/path";
     #endregion
@@ -19,15 +19,15 @@ namespace RepoMonitor.Core.UnitTests {
     #endregion
 
     /// <summary>
-    /// Confirm the newly created <see cref="RepoMonitor"/> is
+    /// Confirm the newly created <see cref="RepositoryMonitor"/> is
     /// correctly initialized:
     /// - it has a list of monitored repositories,
     /// - the list is empty.
     /// </summary>
     [Test]
-    public void NewRepoMonitorIsEmpty() {
+    public void NewRepositoryMonitorIsEmpty() {
       ICollection<SCM> scms = TestUtil.CreateArrayOfMockedSCMsOnTestRepos();
-      RepoMonitor repoMonitor = new RepoMonitor(scms);
+      RepositoryMonitor repoMonitor = new RepositoryMonitor(scms);
 
       Assert.IsNotNull(repoMonitor.Repositories);
       Assert.IsEmpty(repoMonitor.Repositories);
@@ -41,7 +41,7 @@ namespace RepoMonitor.Core.UnitTests {
     [Test]
     public void AddingRepoGeneratesOnChangeEvent() {
       ICollection<SCM> scms = TestUtil.CreateArrayOfMockedSCMsOnTestRepos();
-      RepoMonitor repoMonitor = new RepoMonitor(scms);
+      RepositoryMonitor repoMonitor = new RepositoryMonitor(scms);
 
       Boolean listChanged = false;
       INotifyCollectionChanged list = repoMonitor.Repositories as INotifyCollectionChanged;
@@ -63,7 +63,7 @@ namespace RepoMonitor.Core.UnitTests {
     [Test]
     public void RemovingRepoGeneratesOnChangeEvent() {
       ICollection<SCM> scms = TestUtil.CreateArrayOfMockedSCMsOnTestRepos();
-      RepoMonitor repoMonitor = new RepoMonitor(scms);
+      RepositoryMonitor repoMonitor = new RepositoryMonitor(scms);
       repoMonitor.Repositories.Add(new Repository(REPO_URL));
 
       Boolean listChanged = false;
