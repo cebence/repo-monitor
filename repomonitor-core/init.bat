@@ -33,6 +33,11 @@ if exist "%DOTNET_451_SDK%" set "BUILD_PARAMS=%BUILD_PARAMS% /p:TargetFrameworkV
 rem Limit the amount of information on the console.
 set "BUILD_PARAMS=%BUILD_PARAMS% /v:minimal"
 
+set OUTPUT_DIR=build\bin\%BUILD_CONFIG%
+if "%BUILD_PLATFORM:"=%"=="x86" set OUTPUT_DIR=%OUTPUT_DIR%\%BUILD_PLATFORM%
+if "%BUILD_PLATFORM:"=%"=="x64" set OUTPUT_DIR=%OUTPUT_DIR%\%BUILD_PLATFORM%
+if not exist "%OUTPUT_DIR%" mkdir "%OUTPUT_DIR%"
+
 rem Direct MSBuild to save the build log to OUTPUT_DIR.
 set "BUILD_REPORT=%OUTPUT_DIR%\build-log.txt"
 set "BUILD_PARAMS=%BUILD_PARAMS% /fl /flp:logfile=%BUILD_REPORT%;verbosity:minimal"
@@ -43,10 +48,6 @@ set NUNIT_SUFFIX=
 if "%BUILD_PLATFORM:"=%"=="x86" set NUNIT_SUFFIX=-x86
 set "NUNIT_RUNNER=%~dp0packages\NUnit.Runners.2.6.4\tools\nunit-console%NUNIT_SUFFIX%.exe"
 set "TEST_REPORT=%OUTPUT_DIR%\test-results.xml"
-
-set OUTPUT_DIR=build\bin\%BUILD_CONFIG%
-if "%BUILD_PLATFORM:"=%"=="x86" set OUTPUT_DIR=%OUTPUT_DIR%\%BUILD_PLATFORM%
-if "%BUILD_PLATFORM:"=%"=="x64" set OUTPUT_DIR=%OUTPUT_DIR%\%BUILD_PLATFORM%
 
 rem ############################################################
 rem Code coverage tool setup.
