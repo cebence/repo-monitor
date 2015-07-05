@@ -1,4 +1,6 @@
+using Moq;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace RepoMonitor.Core.UnitTests {
@@ -143,6 +145,55 @@ namespace RepoMonitor.Core.UnitTests {
       get {
         return EchoerPathSingleton.EchoerPath;
       }
+    }
+    #endregion
+
+    #region SCM mocks
+    public const String HG_REPO_1 = "test-repo";
+    public const String HG_REPO_2 = "test-repo-clone";
+    public const String GIT_REPO_1 = "git-repo";
+    public const String GIT_REPO_2 = "git-repo-clone";
+
+    /// <summary>
+    /// Creates a Mercurial (Hg) mock configured to recognize test repositories.
+    /// </summary>
+    public static Mock<SCM> CreateHgMockOnTestRepos() {
+      Mock<SCM> mock = new Mock<SCM>();
+      mock.Setup(scm => scm.IsRepository(It.Is<String>(
+          s => s.EndsWith(HG_REPO_1) || s.EndsWith(HG_REPO_2)))).Returns(true);
+      return mock;
+    }
+
+    /// <summary>
+    /// Creates a Git mock configured to recognize test repositories.
+    /// </summary>
+    public static Mock<SCM> CreateGitMockOnTestRepos() {
+      Mock<SCM> mock = new Mock<SCM>();
+      mock.Setup(scm => scm.IsRepository(It.Is<String>(
+          s => s.EndsWith(GIT_REPO_1) || s.EndsWith(GIT_REPO_2)))).Returns(true);
+      return mock;
+    }
+
+    /// <summary>
+    /// Creates a read-only collection with Hg and Git mocked SCMs (not mocks!).
+    /// </summary>
+    public static ICollection<SCM> CreateArrayOfMockedSCMsOnTestRepos() {
+      SCM[] scms = new SCM[2];
+      scms[0] = CreateHgMockOnTestRepos().Object;
+      scms[1] = CreateGitMockOnTestRepos().Object;
+
+      return Array.AsReadOnly(scms);
+    }
+
+    /// <summary>
+    /// Creates a read-only collection of SCMs with specified mocks.
+    /// </summary>
+    public static ICollection<SCM> CreateArrayOfMockedSCMs(Mock<SCM>[] mocks) {
+      SCM[] scms = new SCM[mocks.Length];
+      for (int i = 0; i < mocks.Length; i++) {
+        scms[i] = mocks[i].Object;
+      }
+      return Array.AsReadOnly(scms);
     }
     #endregion
   }

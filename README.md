@@ -55,8 +55,8 @@ Initial implementation consists of these components:
 - [x] Redirect NUnit results (`TestResult.xml`) to `build` folder, i.e. `%PROJECT%\build\$(Configuration)\$(Platform)\test-results.xml`.
 - [x] A repository is a folder containing the `.hg` sub-folder. http://mercurial.selenic.com/wiki/Repository
 - [x] Application will detect existence of Mercurial by invoking `hg --version` and parsing the output.
-- [ ] Checking a repository for changes is done by invoking `hg summary --remote` in the repository folder and parsing the output.
-- [ ] **Unit tests:** test the parsing logic using example `hg` output.
+- [x] Checking a repository for changes is done by invoking `hg summary --remote` in the repository folder and parsing the output.
+- [x] **Unit tests:** test the parsing logic using example `hg` output.
 - [ ] **Integration tests:** use installed `hg.exe` against `test-resources`.
 - [ ] **Integration tests:** embed Mercurial installation in a project sub-folder like `%UserProfile%\AppData\Local\Atlassian\SourceTree\hg_local`?
 - [x] Configure Continuous Integration (CI).

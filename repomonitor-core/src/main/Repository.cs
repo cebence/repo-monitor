@@ -2,7 +2,21 @@
 using System.ComponentModel;
 
 namespace RepoMonitor.Core {
-  #region Repository status enum
+  /// <summary>
+  /// Repository type so the correct SCM can be used.
+  /// </summary>
+  public enum RepositoryType {
+    /// <summary>
+    /// It is a Git repository.
+    /// </summary>
+    Git,
+
+    /// <summary>
+    /// It is a Mercurial (Hg) repository.
+    /// </summary>
+    Mercurial
+  }
+
   /// <summary>
   /// Local repository status as compared to its default remote repository.
   /// </summary>
@@ -27,7 +41,6 @@ namespace RepoMonitor.Core {
     /// </summary>
     AllDirty
   }
-  #endregion
 
   /// <summary>
   /// Represents a local Mercurial (hg) repository that can be queried for
@@ -152,13 +165,25 @@ namespace RepoMonitor.Core {
     #endregion
 
     /// <summary>
+    /// Gets repository's type.
+    /// </summary>
+    public RepositoryType RepoType { get; private set; }
+
+    /// <summary>
     /// Creates a new Mercurial repository with the specified URL.
     /// </summary>
-    public Repository(String url) {
+    public Repository(String url) : this(url, RepositoryType.Mercurial) {
+    }
+
+    /// <summary>
+    /// Creates a new repository with the specified URL and type.
+    /// </summary>
+    public Repository(String url, RepositoryType repoType) {
       _url = url;
       _incoming = 0;
       _outgoing = 0;
       _lastUpdate = DateTime.MinValue;
+       RepoType = repoType;
     }
   }
 }

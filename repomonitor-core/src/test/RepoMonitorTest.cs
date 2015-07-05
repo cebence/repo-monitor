@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using RepoMonitor.Core;
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 
 namespace RepoMonitor.Core.UnitTests {
@@ -25,7 +26,8 @@ namespace RepoMonitor.Core.UnitTests {
     /// </summary>
     [Test]
     public void NewRepoMonitorIsEmpty() {
-      RepoMonitor repoMonitor = new RepoMonitor();
+      ICollection<SCM> scms = TestUtil.CreateArrayOfMockedSCMsOnTestRepos();
+      RepoMonitor repoMonitor = new RepoMonitor(scms);
 
       Assert.IsNotNull(repoMonitor.Repositories);
       Assert.IsEmpty(repoMonitor.Repositories);
@@ -38,7 +40,8 @@ namespace RepoMonitor.Core.UnitTests {
     /// </summary>
     [Test]
     public void AddingRepoGeneratesOnChangeEvent() {
-      RepoMonitor repoMonitor = new RepoMonitor();
+      ICollection<SCM> scms = TestUtil.CreateArrayOfMockedSCMsOnTestRepos();
+      RepoMonitor repoMonitor = new RepoMonitor(scms);
 
       Boolean listChanged = false;
       INotifyCollectionChanged list = repoMonitor.Repositories as INotifyCollectionChanged;
@@ -59,7 +62,8 @@ namespace RepoMonitor.Core.UnitTests {
     /// </summary>
     [Test]
     public void RemovingRepoGeneratesOnChangeEvent() {
-      RepoMonitor repoMonitor = new RepoMonitor();
+      ICollection<SCM> scms = TestUtil.CreateArrayOfMockedSCMsOnTestRepos();
+      RepoMonitor repoMonitor = new RepoMonitor(scms);
       repoMonitor.Repositories.Add(new Repository(REPO_URL));
 
       Boolean listChanged = false;

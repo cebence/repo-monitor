@@ -8,31 +8,31 @@ namespace RepoMonitor.Core {
   /// Searches the file system for supported repositories.
   /// </summary>
   public class RepositoryFinder {
-    private ReadOnlyCollection<SCM> scms;
+    /// <summary>
+    /// Returns a collection of <see cref="SCM"/>s used.
+    /// </summary>
+    public ICollection<SCM> SCMs { get; private set; }
 
     /// <summary>
     /// Initializes a new instance of <see cref="RepositoryFinder"/>.
     /// </summary>
     /// <param name="scms">
-    /// A non-empty array of <see cref="SCM"/>s used to recognize a repository.
+    /// A non-empty collection of <see cref="SCM"/>s used to recognize a repository.
     /// </param>
+    /// <exception cref="ArgumentNullException">
+    /// When <paramref name="scms"/> is <see langword="null"/>.
+    /// </exception>
     /// <exception cref="ArgumentException">
-    /// When <paramref name="scms"/> is <see langword="null"/> or an empty array.
-    /// </param>
-    public RepositoryFinder(SCM[] scms) {
-      if (scms == null || scms.Length == 0) {
-        throw new ArgumentException("Must specify an array of SCMs.");
+    /// When <paramref name="scms"/> is an empty array.
+    /// </exception>
+    public RepositoryFinder(ICollection<SCM> scms) {
+      if (scms == null) {
+        throw new ArgumentNullException("A collection of SCMs is null.");
       }
-      this.scms = Array.AsReadOnly(scms);
-    }
-
-    /// <summary>
-    /// Returns a read-only collection of <see cref="SCM"/>s used.
-    /// </summary>
-    public ICollection<SCM> SCMs {
-      get {
-        return this.scms;
+      if (scms.Count == 0) {
+        throw new ArgumentException("A collection of SCMs is empty.");
       }
+      SCMs = scms;
     }
 
     /// <summary>
@@ -140,7 +140,7 @@ namespace RepoMonitor.Core {
     /// responds positivelly it is returned, otherwise null is returned.
     /// </summary>
     private SCM AcceptsRepository(DirectoryInfo folder) {
-      foreach (SCM scm in this.scms) {
+      foreach (SCM scm in SCMs) {
         if (scm.IsRepository(folder.FullName)) {
           return scm;
         }

@@ -22,6 +22,7 @@ namespace RepoMonitor.Core.UnitTests {
     private const String PROP_URL = "Url";
     #endregion
 
+    #region Instantiation test cases
     /// <summary>
     /// Confirm the newly created <see cref="Repository"/> is
     /// correctly initialized:
@@ -33,15 +34,28 @@ namespace RepoMonitor.Core.UnitTests {
     /// </summary>
     [Test]
     public void NewRepositoryIsInitialized() {
-      Repository repo = new Repository(REPO_URL);
+      Repository repo = new Repository(REPO_URL, RepositoryType.Git);
 
       Assert.AreEqual(REPO_URL, repo.Url);
       Assert.AreEqual(REPO_NAME, repo.Name);
+      Assert.AreEqual(RepositoryType.Git, repo.RepoType);
       Assert.AreEqual(0, repo.Incoming);
       Assert.AreEqual(0, repo.Outgoing);
       Assert.AreEqual(RepoStatus.Synced, repo.Status);
       Assert.AreEqual(DateTime.MinValue, repo.LastUpdate);
     }
+
+    /// <summary>
+    /// Confirm the newly created <see cref="Repository"/> is a
+    /// Mercurial repository.
+    /// </summary>
+    [Test]
+    public void NewDefaultRepositoryIsMercurial() {
+      Repository repo = new Repository(REPO_URL);
+
+      Assert.AreEqual(RepositoryType.Mercurial, repo.RepoType);
+    }
+    #endregion
 
     /// <summary>
     /// Confirm the `PropertyChanged` event is generated **twice** when

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace RepoMonitor.Core {
   /// <summary>
@@ -11,6 +12,7 @@ namespace RepoMonitor.Core {
     #region Mercurial executable and command-line arguments
     public const String HG_EXE = "hg.exe";
     public const String CMD_VERSION = "--version";
+    public const String CMD_SUMMARY_REMOTE = "summary --remote";
     #endregion
 
     private ProcessExecutor procExecutor;
@@ -18,7 +20,16 @@ namespace RepoMonitor.Core {
     /// <summary>
     /// Initializes a new instance of <see cref="Mercurial"/>.
     /// </summary>
+    /// <param name="processExecutor">
+    /// A <see cref="ProcessExecutor"/> to use to invoke Mercurial commands.
+    /// </param>
+    /// <exception cref="ArgumentNullException">
+    /// When <paramref name="processExecutor"/> is <see langword="null"/>.
+    /// </exception>
     public Mercurial(ProcessExecutor processExecutor) {
+      if (processExecutor == null) {
+        throw new ArgumentNullException("ProcessExecutor is null.");
+      }
       this.procExecutor = processExecutor;
     }
 
@@ -67,6 +78,9 @@ namespace RepoMonitor.Core {
     /// Quick and dirty check - asume any folder containing the <c>.hg</c>
     /// sub-folder is a Mercurial repository.
     /// </remarks>
+    /// <param name="path">
+    /// Full path to a potential Mercurial repository.
+    /// </param>
     /// <returns>
     /// <see langword="true"/> if the specified path is a Mercurial
     /// repository, <see langword="false"/> otherwise.
@@ -74,5 +88,94 @@ namespace RepoMonitor.Core {
     public Boolean IsRepository(String path) {
       return Directory.Exists(Path.Combine(path, ".hg"));
     }
+
+    /// <summary>
+    /// Returns entire response to the <c>hg summary --remote</c> command.
+    /// </summary>
+    /// <param name="repositoryPath">
+    /// Full path to a Mercurial repository.
+    /// </param>
+    /// <summary>
+    /// Returns entire response to the <c>hg summary --remote</c> command.
+    /// </summary>
+    public String GetSummaryRemoteText(String repositoryPath) {
+      ProcessExecutor.Result result = procExecutor.Execute(
+          HG_EXE, CMD_SUMMARY_REMOTE,
+          repositoryPath, null, TimeSpan.FromSeconds(5));
+      if (result.ExitCode == 0) {
+        return result.StdOut;
+      }
+      return null;
+    }
+
+    private static readonly Regex REX_REMOTE_LINE = new Regex(
+        "^remote: (.+)$", RegexOptions.Multiline);
+    private static readonly Regex REX_REMOTE_LINE_INCOMING = new Regex(
+        "1 or more incoming");
+    private static readonly Regex REX_REMOTE_LINE_OUTGOING = new Regex(
+        @"(\d+) outgoing");
+
+    /// <summary>
+    /// Parses Mercurial's <c>summary --remote</c> response into the number
+    /// of incoming and the number of outgoing changes.
+    /// </summary>
+    /// <param name="summary">
+    /// The summary response text to parse.
+    /// </param>
+    /// <param name="incoming">
+    /// When this method returns, contains the number of incoming changes
+    /// parsed from summary text. This parameter is passed uninitialized.
+    /// </param>
+    /// <param name="outgoing">
+    /// When this method returns, contains the number of outgoing changes
+    /// parsed from summary text. This parameter is passed uninitialized.
+    /// </param>
+    /// <exception cref="ArgumentException">
+    /// When <paramref name="summary"/> is not in the correct format, i.e.
+    /// the <c>remote:</c> line is missing or invalid.
+    /// </exception>
+    public void ParseSummaryRemoteText(String summary, out int incoming, out int outgoing) {
+      // Assume the repository is "synced".
+      incoming = 0;
+      outgoing = 0;
+
+      // Locate the line starting with "remote: ".
+      Match match = REX_REMOTE_LINE.Match(summary);
+      if (match == null) {
+        throw new ArgumentException("'remote:' line not found.");
+      }
+
+      // Extract the rest of the line.
+      String value = match.Groups[1].Value;
+      if (String.IsNullOrEmpty(value)) {
+        throw new ArgumentException("'remote:' line has no value.");
+      }
+
+      // "synced" repository has 0 incoming/outgoing changes.
+      if ("(synced)".Equals(value)) {
+        incoming = 0;
+        outgoing = 0;
+        return;
+      }
+
+      Boolean hasIncoming = false;
+      Boolean hasOutgoing = false;
+
+      if (REX_REMOTE_LINE_INCOMING.Match(value).Success) {
+        incoming = 1;
+        hasIncoming = true;
+      }
+
+      match = REX_REMOTE_LINE_OUTGOING.Match(value);
+      if (match.Success) {
+        outgoing = Convert.ToInt32(match.Groups[1].Value);
+        hasOutgoing = true;
+      }
+
+      if (!hasIncoming && !hasOutgoing) {
+        throw new ArgumentException("'remote:' line is invalid.");
+      }
+    }
+
   }
 }
