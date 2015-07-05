@@ -96,9 +96,12 @@ namespace RepoMonitor.Core.UnitTests {
       RepositoryFinder finder = new RepositoryFinder(
           TestUtil.CreateArrayOfMockedSCMs(mocks));
 
-      IDictionary<String, SCM> repos = finder.FindRepositories(repoPath);
+      // Cast to Dictionary in order to use ContainsValue().
+      Dictionary<String, SCM> repos = finder.FindRepositories(repoPath)
+          as Dictionary<String, SCM>;
 
       Assert.AreEqual(1, repos.Count);
+      Assert.IsTrue(repos.ContainsValue(hgMock.Object));
       hgMock.Verify(m => m.IsRepository(It.IsAny<String>()));
 
       // TODO Add checks for Git: GIT_REPO_1

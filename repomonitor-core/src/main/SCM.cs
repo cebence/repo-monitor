@@ -6,6 +6,11 @@ namespace RepoMonitor.Core {
   /// </summary>
   public interface SCM {
     /// <summary>
+    /// Gets <see cref="RepositoryType"/> this SCM tool supports.
+    /// </summary>
+    RepositoryType RepoType { get; }
+
+    /// <summary>
     /// Returns <see langword="true"/> if the SCM tool is available on the
     /// system (i.e. is it installed), <see langword="false"/> otherwise.
     /// </summary>

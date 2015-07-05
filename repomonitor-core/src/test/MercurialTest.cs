@@ -66,6 +66,7 @@ namespace RepoMonitor.Core.UnitTests {
       Mercurial hg = new Mercurial(new Mock<ProcessExecutor>().Object);
 
       Assert.IsNotNull(hg);
+      Assert.AreEqual(RepositoryType.Mercurial, hg.RepoType);
     }
 
     /// <summary>

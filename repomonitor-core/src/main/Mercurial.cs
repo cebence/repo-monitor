@@ -34,6 +34,11 @@ namespace RepoMonitor.Core {
     }
 
     /// <summary>
+    /// This SCM tool supports <see cref="RepositoryType.Mercurial"/>.
+    /// </summary>
+    public RepositoryType RepoType { get { return RepositoryType.Mercurial; } }
+
+    /// <summary>
     /// Returns <see langword="true"/> if Mercurial is available on the
     /// system (i.e. is it installed), <see langword="false"/> otherwise.
     /// </summary>
@@ -146,10 +151,8 @@ namespace RepoMonitor.Core {
       }
       String value = match.Groups[1].Value;
 
-      // "synced" repository has 0 incoming/outgoing changes.
+      // "synced" repository has 0 changes (vars already initialized).
       if ("(synced)".Equals(value)) {
-        incoming = 0;
-        outgoing = 0;
         return;
       }
 
