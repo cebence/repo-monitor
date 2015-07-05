@@ -139,17 +139,12 @@ namespace RepoMonitor.Core {
       incoming = 0;
       outgoing = 0;
 
-      // Locate the line starting with "remote: ".
+      // Locate the line starting with "remote: ", extract the rest of the line.
       Match match = REX_REMOTE_LINE.Match(summary);
-      if (match == null) {
+      if (!match.Success) {
         throw new ArgumentException("'remote:' line not found.");
       }
-
-      // Extract the rest of the line.
       String value = match.Groups[1].Value;
-      if (String.IsNullOrEmpty(value)) {
-        throw new ArgumentException("'remote:' line has no value.");
-      }
 
       // "synced" repository has 0 incoming/outgoing changes.
       if ("(synced)".Equals(value)) {

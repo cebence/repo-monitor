@@ -299,6 +299,8 @@ namespace RepoMonitor.Core.UnitTests {
       Assert.Throws<ArgumentException>(() =>
           hg.ParseSummaryRemoteText("", out i, out o));
       Assert.Throws<ArgumentException>(() =>
+          hg.ParseSummaryRemoteText("parent: 2:71e86589c1bb tip", out i, out o));
+      Assert.Throws<ArgumentException>(() =>
           hg.ParseSummaryRemoteText("remote: ", out i, out o));
       Assert.Throws<ArgumentException>(() =>
           hg.ParseSummaryRemoteText("remote: qwerty", out i, out o));
