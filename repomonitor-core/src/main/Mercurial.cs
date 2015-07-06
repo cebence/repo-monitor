@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel.Composition;
 using System.IO;
 using System.Text.RegularExpressions;
 
@@ -8,6 +9,7 @@ namespace RepoMonitor.Core {
   /// <summary>
   /// SCM implementation for the Mercurial.
   /// </summary>
+  [Export]
   public class Mercurial : SCM {
     #region Mercurial executable and command-line arguments
     public const String HG_EXE = "hg.exe";
